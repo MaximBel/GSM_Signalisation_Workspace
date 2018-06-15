@@ -1,0 +1,69 @@
+/*
+ * io.c
+ *
+ *  Created on: 13 θών. 2018 γ.
+ *      Author: Max
+ */
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "io.h"
+
+#define BUZZER_PERIOD_ACTIVE 700
+
+#define BUZZER_PERIOD_PASSIVE 500
+
+typedef enum {
+	BuzzerPhase_Active,
+	BuzzerPhase_Passive
+} BuzzerPhase_t;
+
+
+static
+
+static io_handlers_t io_handlers;
+
+
+
+static void io_handler(void *pvParameters);
+
+static void buzzer_run(void);
+
+
+uint8_t io_init(io_handlers_t *handlers) {
+
+	if(handlers->ButtonHandler == NULL ||
+			handlers->DoorHandler == NULL) {
+
+		return 1;
+
+	}
+
+	memcpy(&io_handlers, handlers, sizeof(io_handlers_t));
+
+	xTaskCreate(io_handler, "IO handler", configMINIMAL_STACK_SIZE * 5, NULL, 1, NULL);
+
+}
+
+void ToggleBuzzer(Buzzer_state_t newState);
+
+void SetSSI(uint8_t seg1, uint8_t seg2, uint8_t seg3, uint8_t dots);
+
+
+
+
+
+static void io_handler(void *pvParameters) {
+
+
+
+
+}
+
+static void buzzer_run(void) {
+	static uint32_t last_phase_change = 0;
+
+	switch()
+
+
+}

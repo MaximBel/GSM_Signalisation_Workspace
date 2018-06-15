@@ -1,0 +1,24 @@
+<!doctype html>
+<title>Site Maintenance</title>
+<style>
+  body { text-align: center; padding: 150px; }
+  h1 { font-size: 50px; color: #555; text-align: center;}
+  body { font: 20px Helvetica, sans-serif; color: #333; }
+  article { display: block; text-align: left; width: 650px; margin: 0 auto; }
+  a { color: #dc8100; text-decoration: none; }
+  a:hover { color: #333; text-decoration: none; }
+</style>
+
+<article>
+	<img src="st-atollic-logo.jpg">
+    <h1>We&rsquo;ll be back soon!</h1>
+    <div>
+        <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. If you need to you can always <a href="mailto:info@atollic.com">contact us</a>, otherwise we&rsquo;ll be back online shortly!</p>
+		<p style="font-size: 18px;">Download links to the latest versions:</p>
+		<p style="font-size: 18px;">
+			<a href="http://download.atollic.com/TrueSTUDIO/installers/Atollic_TrueSTUDIO_for_STM32_windows_x86_v9.0.1_20180420-1214.exe">Atollic_TrueSTUDIO_for_STM32_windows_x86_v9.0.1_20180420-1214.exe</a>
+		<br>
+		<a href="http://download.atollic.com/TrueSTUDIO/installers/Atollic_TrueSTUDIO_for_STM32_linux_x86_64_v9.0.1_20180420-1214.tar.gz">Atollic_TrueSTUDIO_for_STM32_linux_x86_64_v9.0.1_20180420-1214.tar.gz</a></p>
+        <p>&mdash; The Team</p>
+    </div>
+</article>

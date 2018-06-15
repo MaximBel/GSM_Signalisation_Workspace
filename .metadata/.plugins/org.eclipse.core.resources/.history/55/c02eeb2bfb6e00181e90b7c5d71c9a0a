@@ -1,0 +1,17 @@
+/*
+ * halFLASH.h
+ *
+ *  Created on: 12 апр. 2017 г.
+ *      Author: Maksim
+ */
+
+#ifndef HAL_INC_HALFLASH_H_
+#define HAL_INC_HALFLASH_H_
+
+#include "stdint.h"
+#include "stddef.h"
+
+void halFlash_Init(void);
+
+
+#endif /* HAL_INC_HALFLASH_H_ */

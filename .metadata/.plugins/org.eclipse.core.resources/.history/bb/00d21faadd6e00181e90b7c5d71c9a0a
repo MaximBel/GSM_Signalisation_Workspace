@@ -1,0 +1,49 @@
+/*
+ * io.c
+ *
+ *  Created on: 13 θών. 2018 γ.
+ *      Author: Max
+ */
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "io.h"
+
+
+static io_handlers_t io_handlers;
+
+
+
+static void io_handler(void *pvParameters);
+
+
+
+uint8_t io_init(io_handlers_t *handlers) {
+
+	if(handlers->ButtonHandler == NULL ||
+			handlers->DoorHandler == NULL) {
+
+		return 1;
+
+	}
+
+	memcpy(&io_handlers, handlers, sizeof(io_handlers_t));
+
+	xTaskCreate(io_handler, "IO handler", )
+
+}
+
+void ToggleBuzzer(Buzzer_state_t newState);
+
+void SetSSI(uint8_t seg1, uint8_t seg2, uint8_t seg3, uint8_t dots);
+
+
+
+
+
+static void io_handler(void *pvParameters) {
+
+
+
+
+}

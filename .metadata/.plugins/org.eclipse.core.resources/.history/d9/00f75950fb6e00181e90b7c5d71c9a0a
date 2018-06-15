@@ -1,0 +1,27 @@
+/*
+ * halFLASH.h
+ *
+ *  Created on: 12 апр. 2017 г.
+ *      Author: Maksim
+ */
+
+#ifndef HAL_INC_HALFLASH_H_
+#define HAL_INC_HALFLASH_H_
+
+#include "stdint.h"
+#include "stddef.h"
+
+typedef struct {
+	char firstPhone[15];
+	char secondPhone[15];
+	uint8_t CRC8;
+} SetupStruct_t;
+
+void Flash_Init(void);
+
+void Flash_WriteSetup(SetupStruct_t *setup);
+
+SetupStruct_t * Flash_ReadSetup(void);
+
+
+#endif /* HAL_INC_HALFLASH_H_ */

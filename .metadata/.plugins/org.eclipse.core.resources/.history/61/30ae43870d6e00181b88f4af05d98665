@@ -1,0 +1,19 @@
+/*
+ * gsm_m950e.h
+ *
+ *  Created on: 11 θών. 2018 γ.
+ *      Author: Max
+ */
+
+#ifndef GSM_M950E_H_
+#define GSM_M950E_H_
+
+
+#include "stdint.h"
+#include "stddef.h"
+
+uint8_t gsm_init(void);
+
+
+
+#endif /* GSM_M950E_H_ */

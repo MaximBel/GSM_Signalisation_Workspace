@@ -1,0 +1,32 @@
+/*
+ * io.h
+ *
+ *  Created on: 13 θών. 2018 γ.
+ *      Author: Max
+ */
+
+#ifndef IO_H_
+#define IO_H_
+
+#include "stddef.h"
+#include "stdint.h"
+
+typedef enum {
+	Buzzer_Pulse,
+	Buzzer_Off
+} Buzzer_state_t;
+
+typedef struct {
+	void (*DoorHandler)(void);
+} io_handlers_t;
+
+
+uint8_t io_init(io_handlers_t handlers);
+
+void ToggleBuzzer(Buzzer_state_t newState);
+
+void
+
+
+
+#endif /* IO_H_ */
