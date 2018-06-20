@@ -56,8 +56,7 @@
 
 /* USER CODE BEGIN Includes */
 
-#include "gsm_m950e.h"
-#include "io.h"
+#include "Logic.h"
 
 /* USER CODE END Includes */
 
@@ -65,9 +64,6 @@
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
-static io_handlers_t io_hand;
-static ModemHandlers_t mod_hand;
 
 /* USER CODE END PV */
 
@@ -78,25 +74,31 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
+TaskHandle_t *logicTaskHandler;
+TaskHandle_t *ioTaskHandler;
+TaskHandle_t *gsmTaskHandler;
+
+
 /* USER CODE END PFP */
 
 /* USER CODE BEGIN 0 */
 
-static void callHandler(char *number) {
+void TestTask(void *pvParameters) {
+	volatile uint32_t heap = 0;
+	volatile uint32_t stack[3] = { 0, 0, 0 };
 
-	asm("NOP");
+	while(1) {
 
-}
+		heap = xPortGetFreeHeapSize();
 
-static void buttonHandler(uint8_t button) {
+		stack[0] = uxTaskGetStackHighWaterMark(logicTaskHandler);
+		stack[1] = uxTaskGetStackHighWaterMark(gsmTaskHandler);
+		stack[2] = uxTaskGetStackHighWaterMark(ioTaskHandler);
 
-	asm("NOP");
+		vTaskDelay(10000);
 
-}
+	}
 
-static void doorHandler(void) {
-
-	asm("NOP");
 
 }
 
@@ -131,14 +133,9 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
-  mod_hand.IncommingCall = callHandler;
+  Logic_InitEverything();
 
-  io_hand.ButtonHandler = buttonHandler;
-  io_hand.DoorHandler = doorHandler;
-
-  gsm_init(&mod_hand);
-
-  io_init(&io_hand);
+  xTaskCreate(TestTask, "Test task", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
 
   /* USER CODE END 2 */
 

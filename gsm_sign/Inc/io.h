@@ -17,7 +17,7 @@ typedef enum {
 } Buzzer_state_t;
 
 typedef struct {
-	void (*DoorHandler)(void);
+	void (*DoorHandler)(uint8_t);
 	void (*ButtonHandler)(uint8_t);
 } io_handlers_t;
 

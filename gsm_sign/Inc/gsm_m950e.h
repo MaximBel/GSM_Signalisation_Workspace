@@ -21,11 +21,11 @@ typedef enum {
 } OutCalling_t;
 
 typedef enum {
-	ModemToggle_On,
-	ModemToggle_Off,
-	ModemToggle_Error,
-	ModemToggle_Busy
-} ModemToggle_t;
+	ModemState_On,
+	ModemState_Off,
+	ModemState_Error,
+	ModemState_Busy
+} ModemStates_t;
 
 typedef struct {
 	void (*IncommingCall)(char *Number);
@@ -33,9 +33,9 @@ typedef struct {
 
 uint8_t gsm_init(ModemHandlers_t *handlers);
 
-void ToggleModem(ModemToggle_t State);
+void ToggleModem(ModemStates_t State);
 
-ModemToggle_t GetModemState(void);
+ModemStates_t GetModemState(void);
 
 void CallToNumber(char *Number, uint16_t Timeout);
 

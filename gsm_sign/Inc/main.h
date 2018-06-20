@@ -59,16 +59,16 @@
 
 #define led13_Pin GPIO_PIN_13
 #define led13_GPIO_Port GPIOC
+#define button_Pin GPIO_PIN_0
+#define button_GPIO_Port GPIOA
 #define buzzer_Pin GPIO_PIN_5
 #define buzzer_GPIO_Port GPIOA
-#define button_Pin GPIO_PIN_6
-#define button_GPIO_Port GPIOA
+#define buttonA6_Pin GPIO_PIN_6
+#define buttonA6_GPIO_Port GPIOA
 #define buttonA7_Pin GPIO_PIN_7
 #define buttonA7_GPIO_Port GPIOA
 #define buttonB0_Pin GPIO_PIN_0
 #define buttonB0_GPIO_Port GPIOB
-#define buttonB1_Pin GPIO_PIN_1
-#define buttonB1_GPIO_Port GPIOB
 #define Boot_output_Pin GPIO_PIN_12
 #define Boot_output_GPIO_Port GPIOB
 #define Ring_input_Pin GPIO_PIN_13
@@ -91,6 +91,8 @@
 #define segmentsB4_GPIO_Port GPIOB
 #define segmentsB5_Pin GPIO_PIN_5
 #define segmentsB5_GPIO_Port GPIOB
+#define door_Pin GPIO_PIN_6
+#define door_GPIO_Port GPIOB
 #define seg_in_Pin GPIO_PIN_7
 #define seg_in_GPIO_Port GPIOB
 #define seg_inB8_Pin GPIO_PIN_8

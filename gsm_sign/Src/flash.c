@@ -8,9 +8,12 @@
 #include <flash.h>
 #include "stm32f1xx_hal.h"
 #include "stm32_hal_legacy.h"
-#include "portable.h"
+//#include "portable.h"
 #include "string.h"
 #include "stdlib.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
 
 #define FIRST_PAGE_ADDRESS  0x08000000
 
@@ -56,7 +59,7 @@ static uint8_t Crc8(uint8_t *pcBlock, uint8_t len)
 
 void Flash_Init(void) {
 
-/*	SetupStruct_t defaultSetup = {
+	SetupStruct_t defaultSetup = {
 			.firstPhone = "380950451110",
 			.secondPhone = "380971910961",
 			.Dummy = 0,
@@ -78,7 +81,7 @@ void Flash_Init(void) {
 
 		Flash_WriteSignalState(&defaultSignState);
 
-	}*/
+	}
 
 	/* Enable Prefetch Buffer */
 	//FLASH_PrefetchBufferCmd( FLASH_PrefetchBuffer_Enable);

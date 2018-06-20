@@ -17,6 +17,8 @@
 
 #define CALL_ABOURT_TIMEOUT 40000
 
+extern TaskHandle_t *gsmTaskHandler;
+
 static char command_pwroff[] = "AT+CPWROFF\r\n";
 
 static char command_chkntw[] = "AT+COPS?\r\n";
@@ -43,7 +45,7 @@ typedef enum {
 	GSM_RunState_Empty
 } GSM_RunStates_t;
 
-static ModemToggle_t modem_state = ModemToggle_Off;
+static ModemStates_t modem_state = ModemState_Off;
 
 static GSM_RunStates_t RunState = GSM_RunState_Idle;
 static GSM_RunStates_t newState = GSM_RunState_Empty;
@@ -71,15 +73,21 @@ uint8_t gsm_init(ModemHandlers_t *handlers) {
 
 	memcpy(&gsm_handlers, handlers, sizeof(ModemHandlers_t));
 
-	xTaskCreate(gsm_task, "GSM task", configMINIMAL_STACK_SIZE, NULL, 2, NULL);
+	if(xTaskCreate(gsm_task, "GSM task", configMINIMAL_STACK_SIZE * 3, NULL, 1, gsmTaskHandler) == pdFAIL) {
+
+		return 1;
+
+	}
+
+	return 0;
 
 }
 
-void ToggleModem(ModemToggle_t State) {
+void ToggleModem(ModemStates_t State) {
 
-	if(State == ModemToggle_On) {
+	if(State == ModemState_On) {
 
-		if(modem_state != ModemToggle_On) {
+		if(modem_state != ModemState_On) {
 
 			newState = GSM_RunState_TurnOn_Start;
 
@@ -87,7 +95,7 @@ void ToggleModem(ModemToggle_t State) {
 
 	} else {
 
-		if (modem_state != ModemToggle_Off) {
+		if (modem_state != ModemState_Off) {
 
 			newState = GSM_RunState_TurnOff;
 
@@ -97,7 +105,7 @@ void ToggleModem(ModemToggle_t State) {
 
 }
 
-ModemToggle_t GetModemState(void) {
+ModemStates_t GetModemState(void) {
 
 	return modem_state;
 
@@ -138,11 +146,15 @@ uint8_t AddTrustedPhones(char *phoneOne, char *phoneTwo){
 
 uint8_t MonitorIncommingCalls(void) {
 
-	if(modem_state == ModemToggle_On && RunState != GSM_RunState_Idle) {
+	if(modem_state == ModemState_On && RunState != GSM_RunState_Idle) {
 
 		newState = GSM_RunState_MonitorIncomming_Start;
 
+		return 0;
+
 	}
+
+	return 1;
 
 }
 
@@ -155,7 +167,11 @@ static void gsm_task(void * pvParameters) {
 
 		HAL_GPIO_WritePin(led13_GPIO_Port, led13_Pin, GPIO_PIN_SET);
 
-		while(1);
+		while(1) {
+
+			vTaskDelay(10000);
+
+		}
 
 	}
 
@@ -163,7 +179,7 @@ static void gsm_task(void * pvParameters) {
 
 	HAL_GPIO_WritePin(Boot_output_GPIO_Port, Boot_output_Pin, GPIO_PIN_SET);
 	HAL_UART_Transmit(&huart3, (uint8_t *) command_pwroff, sizeof(command_pwroff), 1000);
-	modem_state = ModemToggle_Off;
+	modem_state = ModemState_Off;
 
 	while(1) {
 
@@ -250,7 +266,7 @@ static void modem_run(void) {
 
 			if(HAL_UART_Transmit(&huart3, command_chkntw, sizeof(command_chkntw), 50) != HAL_OK) {
 
-				modem_state = ModemToggle_Error;
+				modem_state = ModemState_Error;
 
 				RunState = GSM_RunState_Idle;
 
@@ -264,7 +280,7 @@ static void modem_run(void) {
 
 		} else {
 
-			modem_state = ModemToggle_Error;
+			modem_state = ModemState_Error;
 
 			RunState = GSM_RunState_Idle;
 
@@ -276,7 +292,7 @@ static void modem_run(void) {
 
 		if (strstr(uart_buffer, responce_chkntw) != NULL) {
 
-			modem_state = ModemToggle_On;
+			modem_state = ModemState_On;
 
 			RunState = GSM_RunState_Idle;
 
@@ -284,7 +300,7 @@ static void modem_run(void) {
 
 			if (xTaskGetTickCount() - TurnOn_Time > CALL_WAITON_TIMEOUT) {
 
-				modem_state = ModemToggle_Error;
+				modem_state = ModemState_Error;
 
 				RunState = GSM_RunState_Idle;
 
@@ -295,7 +311,7 @@ static void modem_run(void) {
 				HAL_UART_Receive_IT(&huart3, uart_buffer, sizeof(uart_buffer));
 
 				if(HAL_UART_Transmit(&huart3, command_chkntw, sizeof(command_chkntw), 50) != HAL_OK) {
-					modem_state = ModemToggle_Error;
+					modem_state = ModemState_Error;
 					RunState = GSM_RunState_Idle;
 					return;
 
@@ -322,7 +338,7 @@ static void modem_run(void) {
 		HAL_UART_Receive_IT(&huart3, uart_buffer, sizeof(uart_buffer));
 
 		if(HAL_UART_Transmit(&huart3, call_number_buffer, strlen(call_number_buffer), 50) != HAL_OK) {
-			modem_state = ModemToggle_Error;
+			modem_state = ModemState_Error;
 			RunState = GSM_RunState_Idle;
 			callingState = OutCalling_Error;
 			return;
@@ -354,7 +370,7 @@ static void modem_run(void) {
 		if (xTaskGetTickCount() - Call_Time > CALL_ABOURT_TIMEOUT) {
 
 			if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
-				modem_state = ModemToggle_Error;
+				modem_state = ModemState_Error;
 				callingState = OutCalling_Error;
 				RunState = GSM_RunState_Idle;
 				return;
@@ -372,7 +388,7 @@ static void modem_run(void) {
 				callingState = OutCalling_Connected;
 
 				if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
-					modem_state = ModemToggle_Error;
+					modem_state = ModemState_Error;
 					RunState = GSM_RunState_Idle;
 					return;
 
@@ -385,7 +401,7 @@ static void modem_run(void) {
 				callingState = OutCalling_Refused;
 
 				if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
-					modem_state = ModemToggle_Error;
+					modem_state = ModemState_Error;
 					RunState = GSM_RunState_Idle;
 					return;
 
@@ -408,7 +424,7 @@ static void modem_run(void) {
 
 		HAL_UART_Transmit(&huart3, (uint8_t *) command_pwroff, sizeof(command_pwroff), 1000);
 
-		modem_state = ModemToggle_Off;
+		modem_state = ModemState_Off;
 
 		RunState = GSM_RunState_Idle;
 
@@ -423,7 +439,7 @@ static void modem_run(void) {
 		HAL_UART_Receive_IT(&huart3, uart_buffer, sizeof(uart_buffer));
 
 		if (HAL_UART_Transmit(&huart3, command_inccall, sizeof(command_inccall), 50) != HAL_OK) {
-			modem_state = ModemToggle_Error;
+			modem_state = ModemState_Error;
 			RunState = GSM_RunState_Idle;
 			return;
 		}
@@ -447,7 +463,7 @@ static void modem_run(void) {
 			}
 
 			if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
-				modem_state = ModemToggle_Error;
+				modem_state = ModemState_Error;
 				RunState = GSM_RunState_Idle;
 				return;
 
