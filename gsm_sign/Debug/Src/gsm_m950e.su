@@ -1,0 +1,11 @@
+gsm_m950e.c:496:13:flush_rx	8	static
+gsm_m950e.c:207:16:modem_init	16	static
+gsm_m950e.c:251:13:modem_run	16	static
+gsm_m950e.c:176:13:gsm_task	8	static
+gsm_m950e.c:72:9:gsm_init	96	static
+gsm_m950e.c:91:6:ToggleModem	0	static
+gsm_m950e.c:113:15:GetModemState	0	static
+gsm_m950e.c:119:6:CallToNumber	8	static
+gsm_m950e.c:137:14:GetCallingState	0	static
+gsm_m950e.c:143:9:AddTrustedPhones	16	static
+gsm_m950e.c:159:9:MonitorIncommingCalls	0	static

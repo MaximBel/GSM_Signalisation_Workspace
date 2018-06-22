@@ -37,7 +37,7 @@ void ToggleModem(ModemStates_t State);
 
 ModemStates_t GetModemState(void);
 
-void CallToNumber(char *Number, uint16_t Timeout);
+void CallToNumber(char *Number);
 
 OutCalling_t GetCallingState(void);
 

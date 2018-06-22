@@ -13,6 +13,7 @@
 
 typedef enum {
 	Buzzer_Pulse,
+	Buzzer_SomePulse,
 	Buzzer_Off
 } Buzzer_state_t;
 
@@ -25,6 +26,12 @@ typedef struct {
 uint8_t io_init(io_handlers_t *handlers);
 
 void ToggleBuzzer(Buzzer_state_t newState);
+
+void Buzzer_ContinuouslyBeep(void);
+
+void Buzzer_SomeBeeps(uint8_t count);
+
+void Buzzer_Silent(void);
 
 void SetSSI(uint8_t seg1, uint8_t seg2, uint8_t seg3, uint8_t dots);
 

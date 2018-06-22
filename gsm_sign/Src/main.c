@@ -51,7 +51,6 @@
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 #include "usart.h"
-#include "usb_device.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
@@ -77,7 +76,7 @@ void MX_FREERTOS_Init(void);
 TaskHandle_t *logicTaskHandler;
 TaskHandle_t *ioTaskHandler;
 TaskHandle_t *gsmTaskHandler;
-
+TaskHandle_t *espTaskHandler;
 
 /* USER CODE END PFP */
 
@@ -85,7 +84,7 @@ TaskHandle_t *gsmTaskHandler;
 
 void TestTask(void *pvParameters) {
 	volatile uint32_t heap = 0;
-	volatile uint32_t stack[3] = { 0, 0, 0 };
+	volatile uint32_t stack[4] = { 0, 0, 0 };
 
 	while(1) {
 
@@ -94,6 +93,7 @@ void TestTask(void *pvParameters) {
 		stack[0] = uxTaskGetStackHighWaterMark(logicTaskHandler);
 		stack[1] = uxTaskGetStackHighWaterMark(gsmTaskHandler);
 		stack[2] = uxTaskGetStackHighWaterMark(ioTaskHandler);
+		stack[3] = uxTaskGetStackHighWaterMark(espTaskHandler);
 
 		vTaskDelay(10000);
 
@@ -130,6 +130,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART3_UART_Init();
+  MX_USART2_UART_Init();
 
   /* USER CODE BEGIN 2 */
 
@@ -167,7 +168,6 @@ void SystemClock_Config(void)
 
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
-  RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
     /**Initializes the CPU, AHB and APB busses clocks 
     */
@@ -193,13 +193,6 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  {
-    _Error_Handler(__FILE__, __LINE__);
-  }
-
-  PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-  PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
-  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }

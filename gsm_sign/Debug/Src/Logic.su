@@ -1,0 +1,10 @@
+Logic.c:211:13:callHandler	0	static
+Logic.c:227:13:doorHandler	0	static
+Logic.c:239:16:checkPassword	8	static
+Logic.c:422:16:CallingProcessing	8	static
+Logic.c:283:16:signalProc	8	static
+Logic.c:140:13:LogicTask	16	static
+Logic.c:217:13:buttonHandler	16	static
+Logic.c:64:6:Logic_InitEverything	120	static
+Logic.c:128:6:Logic_PauseSignalisation	0	static
+Logic.c:134:6:Logic_Reboot	0	static

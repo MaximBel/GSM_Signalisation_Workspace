@@ -19,10 +19,22 @@ typedef enum {
 typedef struct {
 	char firstPhone[15];
 	char secondPhone[15];
-	uint8_t Dummy;
+	uint32_t signPrepareDelay;
+	uint32_t signPauseDelay;
+	uint32_t signStartCallDelay;
+	uint32_t signStartBeepDelay;
+	uint32_t callAbortTimeout;
+	uint32_t buzzerActive;
+	uint32_t buzzerPassive;
+	uint32_t buzzerActimeSome;
+	uint32_t buzzerPassiveSome;
+	uint32_t doorUpdateCount;
+	uint8_t password[4];
+	uint8_t dummy;
 	uint8_t CRC8;
 
 } __attribute__((aligned(1),packed)) SetupStruct_t;
+
 
 typedef struct {
 	SignState_t signal_state;

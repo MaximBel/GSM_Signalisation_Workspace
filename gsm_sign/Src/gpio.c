@@ -82,8 +82,11 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(led13_GPIO_Port, led13_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, buzzer_Pin|segmentsA8_Pin|segmentsA9_Pin|segmentsA10_Pin 
+  HAL_GPIO_WritePin(GPIOA, ch_pd_Pin|segmentsA8_Pin|segmentsA9_Pin|segmentsA10_Pin 
                           |segmentsA15_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, Boot_output_Pin|segments_Pin|segmentsB15_Pin|segmentsB3_Pin 
@@ -103,9 +106,15 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = buzzer_Pin;
+  GPIO_InitStruct.Pin = ch_pd_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(ch_pd_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = buzzer_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
   HAL_GPIO_Init(buzzer_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin PBPin */

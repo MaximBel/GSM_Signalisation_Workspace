@@ -9,7 +9,8 @@
 #include "io.h"
 #include "gsm_m950e.h"
 #include "flash.h"
-
+#include "esp8266.h"
+#include "string.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
@@ -26,12 +27,10 @@ typedef enum {
 	SignalisationPhase_Alarm
 } SignalPhases_t;
 
-#define SIGN_PREPARE_DELAY 	30000
-#define SIGN_REACTION_DELAY 20000
-#define SIGN_WAIT_DELAY 	60000
-#define SIGN_CALL_DELAY		20000
-#define SIGN_START_CALLING	3000
-#define SIGN_START_BEEPING	10000
+static uint32_t signPrepareDelay;
+static uint32_t signWaitDelay;
+static uint32_t signStartCalling;
+static uint32_t signStartBeeping;
 
 extern TaskHandle_t *logicTaskHandler;
 
@@ -47,6 +46,9 @@ static volatile uint8_t incommingCallFromTrust = 0;
 
 static uint8_t callingPhase = 0;
 
+static SignalStates_t signalisationState = SignalisationState_Disarmed;
+
+static uint8_t needReboot = 0;
 
 static void LogicTask(void *pvParameters);
 
@@ -62,8 +64,36 @@ static uint8_t CallingProcessing(void);
 void Logic_InitEverything(void) {
 	io_handlers_t io_hand;
 	ModemHandlers_t mod_hand;
+	SetupStruct_t setupData;
+	SignalState_t sigState;
+	//////////////
 
 	Flash_Init();
+
+	Flash_ReadSetup(&setupData);
+
+	memcpy(trustedPhones[0], setupData.firstPhone, 15);
+	memcpy(trustedPhones[1], setupData.secondPhone, 15);
+
+	signPrepareDelay = setupData.signPrepareDelay;
+	signWaitDelay = setupData.signPauseDelay;
+	signStartCalling = setupData.signStartCallDelay;
+	signStartBeeping = setupData.signStartBeepDelay;
+
+	password[0] = setupData.password[0];
+	password[1] = setupData.password[1];
+	password[2] = setupData.password[2];
+	password[3] = setupData.password[3];
+
+	Flash_ReadSignalState(&sigState);
+
+	if(sigState.signal_state == SignState_Armed) {
+
+		signalisationState = SignalisationState_Armed;
+
+	}
+
+	//////////////////
 
 	mod_hand.IncommingCall = callHandler;
 
@@ -74,9 +104,10 @@ void Logic_InitEverything(void) {
 	//io_init(&io_hand);
 
 	if(gsm_init(&mod_hand) == 0 &&
-			io_init(&io_hand) == 0) {
+			io_init(&io_hand) == 0 &&
+			esp_init() == 0) {
 
-		AddTrustedPhones("380950451110", "380950451110");
+		AddTrustedPhones(trustedPhones[0], trustedPhones[1]);
 
 		buttonQueue = xQueueCreate(4, 1);
 
@@ -86,22 +117,52 @@ void Logic_InitEverything(void) {
 
 		}
 
+	} else {
+
+		while(1);
+
 	}
 
 }
 
+void Logic_PauseSignalisation(void) {
+
+	incommingCallFromTrust = 1;
+
+}
+
+void Logic_Reboot(void) {
+
+	needReboot = 1;
+
+}
+
 static void LogicTask(void *pvParameters) {
-	static SignalStates_t State = SignalisationState_Disarmed;
+	SignalState_t sigState;
+
+	vTaskDelay(40000); // waiting for gsm to be initialised
 
 	while(1) {
 
-		if(State == SignalisationState_Disarmed) {
+		if(needReboot == 1) {
+
+			while(1); // infinite loop for IWD
+
+		}
+
+		if(signalisationState == SignalisationState_Disarmed) {
 
 			switch(checkPassword()) {
 
 			case 0:
 
-				State = SignalisationState_Armed;
+				sigState.signal_state = SignState_Armed;
+
+				Flash_WriteSignalState(&sigState);
+
+				signalisationState = SignalisationState_Armed;
+
+				Buzzer_SomeBeeps(3);
 
 				break;
 
@@ -113,13 +174,15 @@ static void LogicTask(void *pvParameters) {
 
 			case 2:
 
+				Buzzer_SomeBeeps(1);
+
 				// XXX: need to add displaying of temporary message "ERR" on ssi
 
 				break;
 
 			default:
 
-				State = SignalisationState_Disarmed;
+				signalisationState = SignalisationState_Disarmed;
 
 			}
 
@@ -127,7 +190,11 @@ static void LogicTask(void *pvParameters) {
 
 			if(signalProc() == 0) {
 
-				State = SignalisationState_Disarmed;
+				sigState.signal_state = SignState_Disarmed;
+
+				Flash_WriteSignalState(&sigState);
+
+				signalisationState = SignalisationState_Disarmed;
 
 			}
 
@@ -171,8 +238,8 @@ static void doorHandler(uint8_t state) {
 
 static uint8_t checkPassword(void) {
 	static uint8_t pass_buff[4] = { 0, 0, 0, 0 };
-	static lastButtTime = 0;
-	static buttonCounter = 0;
+	static uint32_t lastButtTime = 0;
+	static uint8_t buttonCounter = 0;
 
 	if((xTaskGetTickCount() - lastButtTime) > 5000) {
 
@@ -226,7 +293,7 @@ static uint8_t signalProc(void) {
 
 		ToggleModem(ModemState_Off);
 
-		ToggleBuzzer(Buzzer_Off);
+		Buzzer_SomeBeeps(2);
 
 		phase = SignalisationPhase_Prepare;
 
@@ -237,6 +304,8 @@ static uint8_t signalProc(void) {
 	} else if(passState == 2) {
 
 		// display ERR on ssi
+
+		Buzzer_SomeBeeps(1);
 
 	}
 
@@ -276,7 +345,7 @@ static uint8_t signalProc(void) {
 
 		} else {
 
-			if(((xTaskGetTickCount() - waitTimer) > SIGN_PREPARE_DELAY) && (GetModemState() == ModemState_On)) {
+			if((xTaskGetTickCount() - waitTimer) > signPrepareDelay) {
 
 				if(MonitorIncommingCalls() == 0) {
 
@@ -311,7 +380,7 @@ static uint8_t signalProc(void) {
 
 	case SignalisationPhase_Pause:
 
-		if((xTaskGetTickCount() - waitTimer) > SIGN_WAIT_DELAY) {
+		if((xTaskGetTickCount() - waitTimer) > signWaitDelay) {
 
 			phase = SignalisationPhase_Wait;
 
@@ -321,13 +390,13 @@ static uint8_t signalProc(void) {
 
 	case SignalisationPhase_Alarm:
 
-		if(xTaskGetTickCount() - waitTimer > SIGN_START_BEEPING) {
+		if(xTaskGetTickCount() - waitTimer > signStartBeeping) {
 
-			ToggleBuzzer(Buzzer_Pulse);
+			Buzzer_ContinuouslyBeep();
 
 		}
 
-		if(((xTaskGetTickCount() - waitTimer) > SIGN_START_CALLING) && (callingNeed == 1)) {
+		if(((xTaskGetTickCount() - waitTimer) > signStartCalling) && (callingNeed == 1)) {
 
 			if(CallingProcessing() == 0) {
 
@@ -345,6 +414,8 @@ static uint8_t signalProc(void) {
 
 	}
 
+	return 1;
+
 }
 
 
@@ -354,7 +425,7 @@ static uint8_t CallingProcessing(void) {
 
 	case 0:
 
-		CallToNumber(trustedPhones[0], SIGN_CALL_DELAY);
+		CallToNumber(trustedPhones[0]);
 
 		callingPhase = 1;
 
@@ -380,7 +451,7 @@ static uint8_t CallingProcessing(void) {
 
 	case 2:
 
-		CallToNumber(trustedPhones[1], SIGN_CALL_DELAY);
+		CallToNumber(trustedPhones[1]);
 
 		callingPhase = 3;
 

@@ -13,4 +13,8 @@
 
 void Logic_InitEverything(void);
 
+void Logic_PauseSignalisation(void);
+
+void Logic_Reboot(void);
+
 #endif /* LOGIC_H_ */

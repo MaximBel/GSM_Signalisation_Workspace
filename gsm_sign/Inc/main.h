@@ -61,6 +61,8 @@
 #define led13_GPIO_Port GPIOC
 #define button_Pin GPIO_PIN_0
 #define button_GPIO_Port GPIOA
+#define ch_pd_Pin GPIO_PIN_1
+#define ch_pd_GPIO_Port GPIOA
 #define buzzer_Pin GPIO_PIN_5
 #define buzzer_GPIO_Port GPIOA
 #define buttonA6_Pin GPIO_PIN_6

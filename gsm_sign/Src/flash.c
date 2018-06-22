@@ -21,7 +21,7 @@
 
 #define PAGE_COUNT 64
 
-#define PAGE_SETUP 60
+#define PAGE_SETUP 62
 
 #define PAGE_SIGNALISATION_STATE 61
 
@@ -62,7 +62,18 @@ void Flash_Init(void) {
 	SetupStruct_t defaultSetup = {
 			.firstPhone = "380950451110",
 			.secondPhone = "380971910961",
-			.Dummy = 0,
+			.signPrepareDelay = 30000,
+			.signPauseDelay = 60000,
+			.signStartCallDelay = 3000,
+			.signStartBeepDelay = 10000,
+			.callAbortTimeout = 20000,
+			.buzzerActive = 1500,
+			.buzzerPassive = 1000,
+			.buzzerActimeSome = 250,
+			.buzzerPassiveSome = 250,
+			.doorUpdateCount = 200,
+			.password = { 1, 2, 3, 4 },
+			.dummy = 0,
 			.CRC8 = 0
 	};
 
@@ -95,9 +106,9 @@ void Flash_WriteSetup(SetupStruct_t *setup) {
 
 	setup->CRC8 = 0;
 
-	setup->CRC8 = Crc8((uint8_t *)setup, sizeof(setup));
+	setup->CRC8 = Crc8((uint8_t *)setup, sizeof(SetupStruct_t));
 
-	halFlash_WritePage(PAGE_SETUP, (uint8_t *)setup, sizeof(setup));
+	halFlash_WritePage(PAGE_SETUP, (uint8_t *)setup, sizeof(SetupStruct_t));
 
 }
 
@@ -110,9 +121,9 @@ uint8_t Flash_ReadSetup(SetupStruct_t *setup) {
 
 	temp_setup.CRC8 = 0;
 
-	if(Crc8((uint8_t *)&temp_setup, sizeof(temp_setup)) == temp_crc) {
+	if(Crc8((uint8_t *)&temp_setup, sizeof(SetupStruct_t)) == temp_crc) {
 
-		memcpy(setup, &temp_setup, sizeof(temp_setup));
+		memcpy(setup, &temp_setup, sizeof(SetupStruct_t));
 
 		return 0;
 
@@ -126,24 +137,24 @@ void Flash_WriteSignalState(SignalState_t *sigstate) {
 
 	sigstate->CRC8 = 0;
 
-	sigstate->CRC8 = Crc8((uint8_t *)sigstate, sizeof(sigstate));
+	sigstate->CRC8 = Crc8((uint8_t *)sigstate, sizeof(SignalState_t));
 
-	halFlash_WritePage(PAGE_SIGNALISATION_STATE, (uint8_t *) sigstate, sizeof(sigstate));
+	halFlash_WritePage(PAGE_SIGNALISATION_STATE, (uint8_t *) sigstate, sizeof(SignalState_t));
 
 }
 
 uint8_t Flash_ReadSignalState(SignalState_t *sigstate) {
-	SetupStruct_t temp_sigstate;
+	SignalState_t temp_sigstate;
 	uint8_t temp_crc = 0;
-	halFlash_ReadPage(PAGE_SIGNALISATION_STATE, (uint8_t *)&sigstate, sizeof(sigstate));
+	halFlash_ReadPage(PAGE_SIGNALISATION_STATE, (uint8_t *)&temp_sigstate, sizeof(SignalState_t));
 
 	temp_crc = temp_sigstate.CRC8;
 
 	temp_sigstate.CRC8 = 0;
 
-	if(Crc8((uint8_t *)&temp_sigstate, sizeof(temp_sigstate)) == temp_crc) {
+	if(Crc8((uint8_t *)&temp_sigstate, sizeof(SignalState_t)) == temp_crc) {
 
-		memcpy(sigstate, &temp_sigstate, sizeof(temp_sigstate));
+		memcpy(sigstate, &temp_sigstate, sizeof(SignalState_t));
 
 		return 0;
 
@@ -161,11 +172,7 @@ static uint8_t halFlash_WritePage(uint8_t PageNumber, uint8_t *DataPointer, uint
 
 	if(PageNumber < PAGE_COUNT && DataCount <= PAGE_SIZE) {
 
-		WriteDataPointer = (uint16_t *)pvPortMalloc(DataCount);
-
-		if(WriteDataPointer != NULL) {
-
-			memcpy(WriteDataPointer, DataPointer, DataCount);
+			WriteDataPointer = (uint16_t *)DataPointer;
 
 			HAL_FLASH_Unlock();
 
@@ -176,11 +183,9 @@ static uint8_t halFlash_WritePage(uint8_t PageNumber, uint8_t *DataPointer, uint
 			flash_erase.NbPages = 1;
 			flash_erase.PageAddress = FIRST_PAGE_ADDRESS + PageNumber * PAGE_SIZE;
 
-
-
 			if(HAL_FLASHEx_Erase(&flash_erase, &page_error) == HAL_OK) {
 
-				for (DataCounter = 0; DataCounter < (DataCount / 4); DataCounter++) {
+				for (DataCounter = 0; DataCounter < (DataCount / 2); DataCounter++) {
 
 					if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, (uint16_t)(FIRST_PAGE_ADDRESS + PageNumber * PAGE_SIZE + DataCounter * 2), *(WriteDataPointer + DataCounter) ) != HAL_OK) {
 
@@ -197,17 +202,9 @@ static uint8_t halFlash_WritePage(uint8_t PageNumber, uint8_t *DataPointer, uint
 
 				}
 
-				vPortFree((void *)WriteDataPointer);
-
 			}
 
 			HAL_FLASH_Lock();
-
-		} else {
-
-			returnState = 1;
-
-		}
 
 
 	} else {

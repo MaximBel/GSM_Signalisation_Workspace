@@ -13,16 +13,15 @@
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include "string.h"
+#include "flash.h"
 
-#define BUZZER_PERIOD_ACTIVE 700
+#define BUTTON_PRESS_OFFSET 8
 
-#define BUZZER_PERIOD_PASSIVE 500
-
-#define BUTTON_UPDATE_COUNT 20
-
-#define DOOR_UPDATE_COUNT 200
-
-#define BUTTON_PRESS_OFFSET (BUTTON_UPDATE_COUNT * 0.8)
+static uint32_t buzzerActivePeriod;
+static uint32_t buzzerPassivePeriod;
+static uint32_t buzzerActivePeriodSome;
+static uint32_t buzzerPassivePeriodSome;
+static uint32_t doorUpdateCount;
 
 typedef enum {
 	BuzzerPhase_Active,
@@ -61,6 +60,8 @@ static io_handlers_t io_handlers;
 
 static Buzzer_state_t buzzer_state = Buzzer_Off;
 
+static uint8_t SomeBeepCounter = 0;
+
 
 static void io_handler(void *pvParameters);
 
@@ -73,6 +74,7 @@ static void ssi_run(void);
 static void door_run(void);
 
 uint8_t io_init(io_handlers_t *handlers) {
+	SetupStruct_t setup;
 
 	if(handlers->ButtonHandler == NULL || handlers->DoorHandler == NULL) {
 
@@ -81,6 +83,15 @@ uint8_t io_init(io_handlers_t *handlers) {
 	}
 
 	memcpy(&io_handlers, handlers, sizeof(io_handlers_t));
+
+	Flash_ReadSetup(&setup);
+
+	buzzerActivePeriod = setup.buzzerActive;
+	buzzerPassivePeriod = setup.buzzerPassive;
+	buzzerActivePeriodSome = setup.buzzerActimeSome;
+	buzzerPassivePeriodSome = setup.buzzerPassiveSome;
+	doorUpdateCount = setup.doorUpdateCount;
+
 
 	if(xTaskCreate(io_handler, "IO handler", configMINIMAL_STACK_SIZE * 3, NULL, 1, ioTaskHandler) == pdFAIL) {
 
@@ -92,19 +103,35 @@ uint8_t io_init(io_handlers_t *handlers) {
 
 }
 
-void ToggleBuzzer(Buzzer_state_t newState) {
+void Buzzer_ContinuouslyBeep(void) {
 
-	if((newState == Buzzer_Pulse) && (buzzer_state != newState)) {
+	if(buzzer_state != Buzzer_Pulse) {
 
-		buzzer_state = newState;
+		buzzer_state = Buzzer_Pulse;
 
 		buzzer_phase = BuzzerPhase_Passive;
 
-	} else {
+	}
 
-		buzzer_state = Buzzer_Off;
+}
+
+void Buzzer_SomeBeeps(uint8_t count) {
+
+	if(buzzer_state != Buzzer_SomePulse) {
+
+		buzzer_state = Buzzer_SomePulse;
+
+		SomeBeepCounter = count;
+
+		buzzer_phase = BuzzerPhase_Passive;
 
 	}
+
+}
+
+void Buzzer_Silent(void) {
+
+	buzzer_state = Buzzer_Off;
 
 }
 
@@ -147,43 +174,75 @@ static void io_handler(void *pvParameters) {
 static void buzzer_run(void) {
 	static uint32_t next_phase_change = 0;
 
-	if (buzzer_state == Buzzer_Pulse && xTaskGetTickCount() > next_phase_change) {
+	if (buzzer_state == Buzzer_Pulse || buzzer_state == Buzzer_SomePulse) {
 
-		switch (buzzer_phase) {
+		if(xTaskGetTickCount() > next_phase_change) {
 
-		case BuzzerPhase_Active:
+			switch (buzzer_phase) {
 
-			next_phase_change = xTaskGetTickCount() + BUZZER_PERIOD_ACTIVE;
+			case BuzzerPhase_Active:
 
-			HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_SET);
+				if(buzzer_state == Buzzer_SomePulse) {
 
-			buzzer_phase = BuzzerPhase_Passive;
+					SomeBeepCounter--;
 
-			break;
+					next_phase_change = xTaskGetTickCount() + buzzerActivePeriodSome;
 
-		case BuzzerPhase_Passive:
+				} else {
 
-			next_phase_change = xTaskGetTickCount() + BUZZER_PERIOD_PASSIVE;
+					next_phase_change = xTaskGetTickCount() + buzzerActivePeriod;
 
-			HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_RESET);
+				}
 
-			buzzer_phase = BuzzerPhase_Active;
+				HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_RESET);
 
-			break;
+				buzzer_phase = BuzzerPhase_Passive;
 
-		default:
+				break;
 
-			next_phase_change = xTaskGetTickCount() + BUZZER_PERIOD_PASSIVE;
+			case BuzzerPhase_Passive:
 
-			HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_RESET);
+				if(buzzer_state == Buzzer_SomePulse) {
 
-			buzzer_phase = BuzzerPhase_Active;
+					if(SomeBeepCounter == 0) {
+
+						buzzer_state = Buzzer_Off;
+
+						next_phase_change = 0;
+
+						return;
+
+					}
+
+					next_phase_change = xTaskGetTickCount() + buzzerPassivePeriodSome;
+
+				} else {
+
+					next_phase_change = xTaskGetTickCount() + buzzerPassivePeriod;
+
+				}
+
+				HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_SET);
+
+				buzzer_phase = BuzzerPhase_Active;
+
+				break;
+
+			default:
+
+				next_phase_change = xTaskGetTickCount() + buzzerPassivePeriod;
+
+				HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_SET);
+
+				buzzer_phase = BuzzerPhase_Active;
+
+			}
 
 		}
 
 	} else {
 
-		HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(buzzer_GPIO_Port, buzzer_Pin, GPIO_PIN_SET);
 
 	}
 
@@ -194,15 +253,115 @@ static void button_run(void) {
 	static uint8_t lastState[4] = { 0, 0, 0, 0 };
 	static uint8_t updateCounter = 0;
 
-	if(updateCounter < BUTTON_UPDATE_COUNT) {
+	if(HAL_GPIO_ReadPin(button_GPIO_Port, button_Pin) != 0) {
+
+		if(checkCount[0] > BUTTON_PRESS_OFFSET) {
+
+			checkCount[0] = BUTTON_PRESS_OFFSET;
+
+		} else {
+
+			checkCount[0]++;
+
+		}
+
+	} else {
+
+		checkCount[0] = 0;
+
+	}
+
+	if(HAL_GPIO_ReadPin(buttonA7_GPIO_Port, buttonA7_Pin) != 0) {
+
+		if(checkCount[3] > BUTTON_PRESS_OFFSET) {
+
+			checkCount[3] = BUTTON_PRESS_OFFSET;
+
+		} else {
+
+			checkCount[3]++;
+
+		}
+
+	} else {
+
+		checkCount[3] = 0;
+
+	}
+
+	if(HAL_GPIO_ReadPin(buttonB0_GPIO_Port, buttonB0_Pin) != 0) {
+
+		if(checkCount[2] > BUTTON_PRESS_OFFSET) {
+
+			checkCount[2] = BUTTON_PRESS_OFFSET;
+
+		} else {
+
+			checkCount[2]++;
+
+		}
+
+	} else {
+
+		checkCount[2] = 0;
+
+	}
+
+	if(HAL_GPIO_ReadPin(buttonA6_GPIO_Port, buttonA6_Pin) != 0) {
+
+		if(checkCount[1] > BUTTON_PRESS_OFFSET) {
+
+			checkCount[1] = BUTTON_PRESS_OFFSET;
+
+		} else {
+
+			checkCount[1]++;
+
+		}
+
+	} else {
+
+		checkCount[1] = 0;
+
+	}
+
+	if ((checkCount[0] >= BUTTON_PRESS_OFFSET) && (lastState[0] == 0)) {
+		io_handlers.ButtonHandler(1);
+		lastState[0] = 1;
+	} else if (checkCount[0] == 0) {
+		lastState[0] = 0;
+	}
+
+	if ((checkCount[1] >= BUTTON_PRESS_OFFSET) && (lastState[1] == 0)) {
+		io_handlers.ButtonHandler(2);
+		lastState[1] = 1;
+	} else if (checkCount[1] == 0) {
+		lastState[1] = 0;
+	}
+
+	if ((checkCount[2] >= BUTTON_PRESS_OFFSET) && (lastState[2] == 0)) {
+		io_handlers.ButtonHandler(3);
+		lastState[2] = 1;
+	} else if (checkCount[2] == 0) {
+		lastState[2] = 0;
+	}
+
+	if ((checkCount[3] >= BUTTON_PRESS_OFFSET) && (lastState[3] == 0)) {
+		io_handlers.ButtonHandler(4);
+		lastState[3] = 1;
+	} else if (checkCount[3] == 0) {
+		lastState[3] = 0;
+	}
+
+	/*if(updateCounter < BUTTON_UPDATE_COUNT) {
 
 		checkCount[0] += (HAL_GPIO_ReadPin(button_GPIO_Port, button_Pin) != 0) ? 1 : 0;
 
-		checkCount[1] += (HAL_GPIO_ReadPin(buttonA7_GPIO_Port, buttonA7_Pin) != 0) ? 1 : 0;
+		checkCount[3] += (HAL_GPIO_ReadPin(buttonA7_GPIO_Port, buttonA7_Pin) != 0) ? 1 : 0;
 
 		checkCount[2] += (HAL_GPIO_ReadPin(buttonB0_GPIO_Port, buttonB0_Pin) != 0) ? 1 : 0;
 
-		checkCount[3] += (HAL_GPIO_ReadPin(buttonA6_GPIO_Port, buttonA6_Pin) != 0) ? 1 : 0;
+		checkCount[1] += (HAL_GPIO_ReadPin(buttonA6_GPIO_Port, buttonA6_Pin) != 0) ? 1 : 0;
 
 		updateCounter++;
 
@@ -247,7 +406,7 @@ static void button_run(void) {
 
 		updateCounter = 0;
 
-	}
+	}*/
 
 }
 
@@ -316,7 +475,7 @@ static void door_run(void) {
 	static uint8_t updateCounter = 0;
 	static uint8_t lastState = 0;
 
-	if (updateCounter < DOOR_UPDATE_COUNT) {
+	if (updateCounter < doorUpdateCount) {
 
 		checkCount += (HAL_GPIO_ReadPin(door_GPIO_Port, door_Pin) != 0) ? 1 : 0;
 
@@ -326,7 +485,7 @@ static void door_run(void) {
 
 		if (io_handlers.DoorHandler != NULL) {
 
-			if (((DOOR_UPDATE_COUNT - checkCount) < (DOOR_UPDATE_COUNT / 2)) && (lastState == 1)) {
+			if (((doorUpdateCount - checkCount) < (doorUpdateCount / 2)) && (lastState == 1)) {
 
 				io_handlers.DoorHandler(0); // closed
 

@@ -1,0 +1,8 @@
+flash.c:43:16:Crc8	8	static
+flash.c:167:16:halFlash_WritePage	48	static
+flash.c:220:16:halFlash_ReadPage	8	static
+flash.c:105:6:Flash_WriteSetup	8	static
+flash.c:115:9:Flash_ReadSetup	96	static
+flash.c:136:6:Flash_WriteSignalState	8	static
+flash.c:146:9:Flash_ReadSignalState	24	static
+flash.c:60:6:Flash_Init	88	static

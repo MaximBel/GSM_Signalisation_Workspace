@@ -62,8 +62,6 @@
 	   <include>..\Drivers\STM32F1xx_HAL_Driver\Inc</include>
 	   <include>..\Drivers\STM32F1xx_HAL_Driver\Inc\Legacy</include>
 	   <include>..\Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM3</include>
-	   <include>..\Middlewares\ST\STM32_USB_Device_Library\Core\Inc</include>
-	   <include>..\Middlewares\ST\STM32_USB_Device_Library\Class\CDC\Inc</include>
 	   <include>..\Drivers\CMSIS\Device\ST\STM32F1xx\Include</include>
 	   <include>..\Middlewares\Third_Party\FreeRTOS\Source\include</include>
 	   <include>..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS</include>

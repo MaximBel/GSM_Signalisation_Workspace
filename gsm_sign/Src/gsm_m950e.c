@@ -10,12 +10,10 @@
 #include "task.h"
 #include "usart.h"
 #include "string.h"
-
+#include "flash.h"
 #include "gsm_m950e.h"
 
 #define CALL_WAITON_TIMEOUT 120000
-
-#define CALL_ABOURT_TIMEOUT 40000
 
 extern TaskHandle_t *gsmTaskHandler;
 
@@ -45,6 +43,8 @@ typedef enum {
 	GSM_RunState_Empty
 } GSM_RunStates_t;
 
+static callAbortTimeout;
+
 static ModemStates_t modem_state = ModemState_Off;
 
 static GSM_RunStates_t RunState = GSM_RunState_Idle;
@@ -70,6 +70,11 @@ static void flush_rx(void);
 
 
 uint8_t gsm_init(ModemHandlers_t *handlers) {
+	SetupStruct_t setup;
+
+	Flash_ReadSetup(&setup);
+
+	callAbortTimeout = setup.callAbortTimeout;
 
 	memcpy(&gsm_handlers, handlers, sizeof(ModemHandlers_t));
 
@@ -111,14 +116,21 @@ ModemStates_t GetModemState(void) {
 
 }
 
-void CallToNumber(char *Number, uint16_t Timeout) {
+void CallToNumber(char *Number) {
 
-	sprintf(call_number_buffer, "ATD+%s;\r\n", Number);
+	if(modem_state == ModemState_On) {
 
-	callingState = OutCalling_Busy;
+		sprintf(call_number_buffer, "ATD+%s;\r\n", Number);
 
-	newState = GSM_RunState_Call;
+		callingState = OutCalling_Busy;
 
+		newState = GSM_RunState_Call;
+
+	} else {
+
+		callingState = OutCalling_Error;
+
+	}
 
 }
 
@@ -367,7 +379,7 @@ static void modem_run(void) {
 
 	case GSM_RunState_WaitAbort:
 
-		if (xTaskGetTickCount() - Call_Time > CALL_ABOURT_TIMEOUT) {
+		if (xTaskGetTickCount() - Call_Time > callAbortTimeout) {
 
 			if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
 				modem_state = ModemState_Error;
