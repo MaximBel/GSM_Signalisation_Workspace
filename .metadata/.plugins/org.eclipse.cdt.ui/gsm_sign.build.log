@@ -1,1 +1,577 @@
-Info: Nothing to build for gsm_sign
+16:06:28 **** Incremental Build of configuration Debug for project gsm_sign ****
+Info: Internal Builder is used for build
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\Logic.o ..\Src\Logic.c 
+In file included from ..\Src\Logic.c:16:0:
+..\Src\Logic.c: In function 'buttonHandler':
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:437:115: warning: passing argument 3 of 'xQueueGenericSend' makes integer from pointer without a cast [-Wint-conversion]
+ #define xQueueSendToBack( xQueue, pvItemToQueue, xTicksToWait ) xQueueGenericSend( ( xQueue ), ( pvItemToQueue ), ( xTicksToWait ), queueSEND_TO_BACK )
+                                                                                                                   ^
+..\Src\Logic.c:221:3: note: in expansion of macro 'xQueueSendToBack'
+   xQueueSendToBack(buttonQueue, &button, NULL);
+   ^~~~~~~~~~~~~~~~
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:692:12: note: expected 'TickType_t {aka long unsigned int}' but argument is of type 'void *'
+ BaseType_t xQueueGenericSend( QueueHandle_t xQueue, const void * const pvItemToQueue, TickType_t xTicksToWait, const BaseType_t xCopyPosition ) PRIVILEGED_FUNCTION;
+            ^~~~~~~~~~~~~~~~~
+..\Src\Logic.c: In function 'checkPassword':
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:914:105: warning: passing argument 3 of 'xQueueGenericReceive' makes integer from pointer without a cast [-Wint-conversion]
+ #define xQueueReceive( xQueue, pvBuffer, xTicksToWait ) xQueueGenericReceive( ( xQueue ), ( pvBuffer ), ( xTicksToWait ), pdFALSE )
+                                                                                                         ^
+..\Src\Logic.c:250:5: note: in expansion of macro 'xQueueReceive'
+  if(xQueueReceive(buttonQueue, &pass_buff[buttonCounter], NULL) == pdTRUE) {
+     ^~~~~~~~~~~~~
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:1013:12: note: expected 'TickType_t {aka long unsigned int}' but argument is of type 'void *'
+ BaseType_t xQueueGenericReceive( QueueHandle_t xQueue, void * const pvBuffer, TickType_t xTicksToWait, const BaseType_t xJustPeek ) PRIVILEGED_FUNCTION;
+            ^~~~~~~~~~~~~~~~~~~~
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\system_stm32f1xx.o ..\Src\system_stm32f1xx.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\stm32f1xx_hal_msp.o ..\Src\stm32f1xx_hal_msp.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\gsm_m950e.o ..\Src\gsm_m950e.c 
+..\Src\gsm_m950e.c:46:8: warning: type defaults to 'int' in declaration of 'callAbortTimeout' [-Wimplicit-int]
+ static callAbortTimeout;
+        ^~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c: In function 'AddTrustedPhones':
+..\Src\gsm_m950e.c:147:11: warning: passing argument 1 of 'sprintf' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+   sprintf(trustedPhones[0], "%s", phoneOne);
+           ^~~~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:244:5: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ int _EXFUN(sprintf, (char *__restrict, const char *__restrict, ...)
+     ^
+..\Src\gsm_m950e.c:149:11: warning: passing argument 1 of 'sprintf' discards 'volatile' qualifier from pointer target type [-Wdiscarded-qualifiers]
+   sprintf(trustedPhones[1], "%s", phoneTwo);
+           ^~~~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:244:5: note: expected 'char * restrict' but argument is of type 'volatile char *'
+ int _EXFUN(sprintf, (char *__restrict, const char *__restrict, ...)
+     ^
+..\Src\gsm_m950e.c: In function 'modem_init':
+..\Src\gsm_m950e.c:231:15: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    if (strstr(uart_buffer, responce_ready) != NULL) {
+               ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c: In function 'modem_run':
+..\Src\gsm_m950e.c:279:34: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+    if(HAL_UART_Transmit(&huart3, command_chkntw, sizeof(command_chkntw), 50) != HAL_OK) {
+                                  ^~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:305:14: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if (strstr(uart_buffer, responce_chkntw) != NULL) {
+              ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:325:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+     if(HAL_UART_Transmit(&huart3, command_chkntw, sizeof(command_chkntw), 50) != HAL_OK) {
+                                   ^~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:352:33: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+   if(HAL_UART_Transmit(&huart3, call_number_buffer, strlen(call_number_buffer), 50) != HAL_OK) {
+                                 ^~~~~~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:362:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(uart_buffer, "OK") != NULL) {
+             ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:384:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+    if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
+                                   ^~~~~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:398:15: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    if((strstr(uart_buffer, "CONNECT") != NULL) ) {
+               ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:402:36: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+     if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
+                                    ^~~~~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:411:22: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    } else if((strstr(uart_buffer, "NO CARRIER") != NULL)) {
+                      ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:415:36: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+     if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
+                                    ^~~~~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:453:34: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+   if (HAL_UART_Transmit(&huart3, command_inccall, sizeof(command_inccall), 50) != HAL_OK) {
+                                  ^~~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+..\Src\gsm_m950e.c:465:14: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if (strstr(uart_buffer, "RING") != NULL) {
+              ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:467:15: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    if (strstr(uart_buffer, (char *)trustedPhones[0]) != NULL) {
+               ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:471:22: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    } else if (strstr(uart_buffer, (char *)trustedPhones[1]) != NULL) {
+                      ^~~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\stdio.h:29:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h:50,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h:45,
+                 from ../Inc/stm32f1xx_hal_conf.h:219,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\gsm_m950e.c:477:35: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit' differ in signedness [-Wpointer-sign]
+    if (HAL_UART_Transmit(&huart3, command_abortcall, strlen(command_abortcall), 50) != HAL_OK) {
+                                   ^~~~~~~~~~~~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\gsm_m950e.c:8:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:635:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+                   ^~~~~~~~~~~~~~~~~
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -g3 -Wa,--no-warn -x assembler-with-cpp -specs=nano.specs -o startup\startup_stm32f103xb.o ..\startup\startup_stm32f103xb.s 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\gpio.o ..\Src\gpio.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM3\port.o ..\Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM3\port.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_4.o ..\Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_4.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\flash.o ..\Src\flash.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\timers.o ..\Middlewares\Third_Party\FreeRTOS\Source\timers.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\tasks.o ..\Middlewares\Third_Party\FreeRTOS\Source\tasks.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\main.o ..\Src\main.c 
+..\Src\main.c: In function 'TestTask':
+..\Src\main.c:87:20: warning: variable 'stack' set but not used [-Wunused-but-set-variable]
+  volatile uint32_t stack[4] = { 0, 0, 0 };
+                    ^~~~~
+..\Src\main.c:86:20: warning: variable 'heap' set but not used [-Wunused-but-set-variable]
+  volatile uint32_t heap = 0;
+                    ^~~~
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.o ..\Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\usart.o ..\Src\usart.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\queue.o ..\Middlewares\Third_Party\FreeRTOS\Source\queue.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\list.o ..\Middlewares\Third_Party\FreeRTOS\Source\list.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\io.o ..\Src\io.c 
+..\Src\io.c:51:3: warning: excess elements in array initializer
+   { 0, 0, 0, 0, 0, 0, 0, 0 } // nothing
+   ^
+..\Src\io.c:51:3: note: (near initialization for 'sig_patterns')
+..\Src\io.c: In function 'button_run':
+..\Src\io.c:254:17: warning: unused variable 'updateCounter' [-Wunused-variable]
+  static uint8_t updateCounter = 0;
+                 ^~~~~~~~~~~~~
+At top level:
+..\Src\io.c:254:17: warning: 'updateCounter' defined but not used [-Wunused-variable]
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o ..\Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\esp8266.o ..\Src\esp8266.c 
+..\Src\esp8266.c: In function 'ESPtask':
+..\Src\esp8266.c:89:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[0][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:97:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[1][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:99:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:101:32: warning: format '%s' expects argument of type 'char *', but argument 3 has type 'char (*)[20]' [-Wformat=]
+    if (sscanf(dataPointer, "%12s,%12s", &trustedPhones[0], &trustedPhones[1]) != NULL) {
+                                ^
+..\Src\esp8266.c:101:37: warning: format '%s' expects argument of type 'char *', but argument 4 has type 'char (*)[20]' [-Wformat=]
+    if (sscanf(dataPointer, "%12s,%12s", &trustedPhones[0], &trustedPhones[1]) != NULL) {
+                                     ^
+..\Src\esp8266.c:101:79: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%12s,%12s", &trustedPhones[0], &trustedPhones[1]) != NULL) {
+                                                                               ^~
+..\Src\esp8266.c:105:61: warning: passing argument 1 of 'strlen' from incompatible pointer type [-Wincompatible-pointer-types]
+     memcpy(temp_setup.firstPhone, &trustedPhones[0], strlen(&trustedPhones[0]));
+                                                             ^
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:37:9: note: expected 'const char *' but argument is of type 'char (*)[20]'
+ size_t  _EXFUN(strlen,(const char *));
+         ^
+..\Src\esp8266.c:106:62: warning: passing argument 1 of 'strlen' from incompatible pointer type [-Wincompatible-pointer-types]
+     memcpy(temp_setup.secondPhone, &trustedPhones[1], strlen(&trustedPhones[1]));
+                                                              ^
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:37:9: note: expected 'const char *' but argument is of type 'char (*)[20]'
+ size_t  _EXFUN(strlen,(const char *));
+         ^
+..\Src\esp8266.c:116:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[2][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:124:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[3][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:126:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:130:29: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if(sscanf(dataPointer, "%d", &data) != NULL) {
+                             ^
+..\Src\esp8266.c:130:40: warning: comparison between pointer and integer
+    if(sscanf(dataPointer, "%d", &data) != NULL) {
+                                        ^~
+..\Src\esp8266.c:144:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[4][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:146:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:150:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                              ^
+..\Src\esp8266.c:150:41: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                                         ^~
+..\Src\esp8266.c:164:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[5][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:166:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:170:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                              ^
+..\Src\esp8266.c:170:41: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                                         ^~
+..\Src\esp8266.c:184:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[6][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:186:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:190:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                              ^
+..\Src\esp8266.c:190:41: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                                         ^~
+..\Src\esp8266.c:204:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[7][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:206:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:210:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                              ^
+..\Src\esp8266.c:210:41: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                                         ^~
+..\Src\esp8266.c:224:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[8][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:226:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:230:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d", &data[0], &data[1]) != NULL) {
+                              ^
+..\Src\esp8266.c:230:33: warning: format '%d' expects argument of type 'int *', but argument 4 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d", &data[0], &data[1]) != NULL) {
+                                 ^
+..\Src\esp8266.c:230:57: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d,%d", &data[0], &data[1]) != NULL) {
+                                                         ^~
+..\Src\esp8266.c:245:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[9][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:247:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:251:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d", &data[0], &data[1]) != NULL) {
+                              ^
+..\Src\esp8266.c:251:33: warning: format '%d' expects argument of type 'int *', but argument 4 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d", &data[0], &data[1]) != NULL) {
+                                 ^
+..\Src\esp8266.c:251:57: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d,%d", &data[0], &data[1]) != NULL) {
+                                                         ^~
+..\Src\esp8266.c:266:13: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if(strstr(esp_buffer, &esp_commands[10][0]) != NULL) {
+             ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:268:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:272:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint32_t * {aka long unsigned int *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                              ^
+..\Src\esp8266.c:272:41: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d", &data) != NULL) {
+                                         ^~
+..\Src\esp8266.c:286:14: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+   if (strstr(esp_buffer, &esp_commands[11][0]) != NULL) {
+              ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:288:25: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+    dataPointer = strstr(esp_buffer, "=") + 1;
+                         ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+..\Src\esp8266.c:290:30: warning: format '%d' expects argument of type 'int *', but argument 3 has type 'uint8_t * {aka unsigned char *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d,%d,%d", &temp_pwd[0], &temp_pwd[1], &temp_pwd[2], &temp_pwd[3]) != NULL) {
+                              ^
+..\Src\esp8266.c:290:33: warning: format '%d' expects argument of type 'int *', but argument 4 has type 'uint8_t * {aka unsigned char *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d,%d,%d", &temp_pwd[0], &temp_pwd[1], &temp_pwd[2], &temp_pwd[3]) != NULL) {
+                                 ^
+..\Src\esp8266.c:290:36: warning: format '%d' expects argument of type 'int *', but argument 5 has type 'uint8_t * {aka unsigned char *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d,%d,%d", &temp_pwd[0], &temp_pwd[1], &temp_pwd[2], &temp_pwd[3]) != NULL) {
+                                    ^
+..\Src\esp8266.c:290:39: warning: format '%d' expects argument of type 'int *', but argument 6 has type 'uint8_t * {aka unsigned char *}' [-Wformat=]
+    if (sscanf(dataPointer, "%d,%d,%d,%d", &temp_pwd[0], &temp_pwd[1], &temp_pwd[2], &temp_pwd[3]) != NULL) {
+                                       ^
+..\Src\esp8266.c:290:99: warning: comparison between pointer and integer
+    if (sscanf(dataPointer, "%d,%d,%d,%d", &temp_pwd[0], &temp_pwd[1], &temp_pwd[2], &temp_pwd[3]) != NULL) {
+                                                                                                   ^~
+..\Src\esp8266.c: In function 'send_command':
+..\Src\esp8266.c:326:32: warning: pointer targets in passing argument 2 of 'HAL_UART_Transmit_IT' differ in signedness [-Wpointer-sign]
+  HAL_UART_Transmit_IT(&huart2, command, strlen(command));
+                                ^~~~~~~
+In file included from ../Inc/stm32f1xx_hal_conf.h:315:0,
+                 from ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:46,
+                 from ..\Src\esp8266.c:12:
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h:637:19: note: expected 'uint8_t * {aka unsigned char *}' but argument is of type 'char *'
+ HAL_StatusTypeDef HAL_UART_Transmit_IT(UART_HandleTypeDef *huart, uint8_t *pData, uint16_t Size);
+                   ^~~~~~~~~~~~~~~~~~~~
+..\Src\esp8266.c:330:12: warning: pointer targets in passing argument 1 of 'strstr' differ in signedness [-Wpointer-sign]
+  if(strstr(esp_buffer, responce) != NULL) {
+            ^~~~~~~~~~
+In file included from c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:10:0,
+                 from ..\Src\esp8266.c:11:
+c:\program files (x86)\atollic\truestudio for stm32 9.0.1\armtools\arm-atollic-eabi\include\string.h:44:8: note: expected 'const char *' but argument is of type 'uint8_t * {aka unsigned char *}'
+ char  *_EXFUN(strstr,(const char *, const char *));
+        ^
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\freertos.o ..\Src\freertos.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\event_groups.o ..\Middlewares\Third_Party\FreeRTOS\Source\event_groups.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\stm32f1xx_hal_timebase_TIM.o ..\Src\stm32f1xx_hal_timebase_TIM.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Src\stm32f1xx_it.o ..\Src\stm32f1xx_it.c 
+arm-atollic-eabi-gcc -c -mthumb -mcpu=cortex-m3 -std=gnu99 -D__weak=__attribute__((weak)) -D__packed=__attribute__((__packed__)) -DUSE_HAL_DRIVER -DSTM32F103xB -I../Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3 -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -I../Drivers/CMSIS/Include -Og -ffunction-sections -fdata-sections -g3 -fstack-usage -Wall -specs=nano.specs -o Middlewares\Third_Party\FreeRTOS\Source\croutine.o ..\Middlewares\Third_Party\FreeRTOS\Source\croutine.c 
+arm-atollic-eabi-gcc -o gsm_sign.elf Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_cortex.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_dma.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_flash_ex.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_gpio_ex.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_pwr.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_rcc_ex.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.o Drivers\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_uart.o Middlewares\Third_Party\FreeRTOS\Source\CMSIS_RTOS\cmsis_os.o Middlewares\Third_Party\FreeRTOS\Source\croutine.o Middlewares\Third_Party\FreeRTOS\Source\event_groups.o Middlewares\Third_Party\FreeRTOS\Source\list.o Middlewares\Third_Party\FreeRTOS\Source\portable\GCC\ARM_CM3\port.o Middlewares\Third_Party\FreeRTOS\Source\portable\MemMang\heap_4.o Middlewares\Third_Party\FreeRTOS\Source\queue.o Middlewares\Third_Party\FreeRTOS\Source\tasks.o Middlewares\Third_Party\FreeRTOS\Source\timers.o Src\Logic.o Src\esp8266.o Src\flash.o Src\freertos.o Src\gpio.o Src\gsm_m950e.o Src\io.o Src\main.o Src\stm32f1xx_hal_msp.o Src\stm32f1xx_hal_timebase_TIM.o Src\stm32f1xx_it.o Src\system_stm32f1xx.o Src\usart.o startup\startup_stm32f103xb.o -mthumb -mcpu=cortex-m3 -T../STM32F103CB_FLASH.ld -specs=nosys.specs -static -Wl,-Map=gsm_sign.map -Wl,--gc-sections -Wl,--defsym=malloc_getpagesize_P=0x80 -Wl,--start-group -lc -lm -Wl,--end-group -specs=nano.specs 
+C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.0.1\ide\jre\bin\java -jar C:\Program Files (x86)\Atollic\TrueSTUDIO for STM32 9.0.1\Tools\arm-atollic-reports.jar sizeinfo list gsm_sign.elf 
+Generate build reports...
+Print size information
+   text	   data	    bss	    dec	    hex	filename
+  24860	    564	  12792	  38216	   9548	gsm_sign.elf
+Print size information done
+Generate listing file
+Output sent to: gsm_sign.list
+Generate listing file done
+Generate build reports done
+
+16:06:40 Build Finished (took 11s.933ms)
+
