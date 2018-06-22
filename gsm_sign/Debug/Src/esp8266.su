@@ -1,4 +1,0 @@
-esp8266.c:311:13:flush_rx	8	static
-esp8266.c:319:16:send_command	80	static
-esp8266.c:64:13:ESPtask	24	static
-esp8266.c:49:9:esp_init	16	static
